@@ -1,57 +1,29 @@
 <section class="feature full-width">
   <div class="feature__panel">
-    <div class="feature__grid">
-      <div class="feature__col feature__col--left">
-        {% for block in section.blocks %}
-          {% if forloop.index <= 2 %}
-            {% assign th = block.settings.thumb_handle | strip %}
-            {% assign thumb = all_products[th] %}
-            <div class="callout callout--left" {{ block.shopify_attributes }}>
-              <div class="callout__text">
-                <h3 class="callout__title">{{ block.settings.title }}</h3>
-                <p class="callout__desc">{{ block.settings.text }}</p>
-                {% if block.settings.link_label != blank %}
-                  <a href="{{ block.settings.link }}" class="callout__link">{{ block.settings.link_label }} &rarr;</a>
-                {% endif %}
-              </div>
-              {% if thumb != blank and thumb.featured_media %}
-                <span class="callout__thumb"><img src="{{ thumb.featured_media | image_url: width: 200 }}" alt="" loading="lazy"></span>
-              {% endif %}
-              <div class="callout__node"></div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-
-      <div class="feature__center">
-        {% if section.settings.image != blank %}
-          <img src="{{ section.settings.image | image_url: width: 900 }}" alt="" width="900" height="900" loading="lazy">
-        {% else %}
-          <img src="{{ 'middle-rocket.png' | asset_url }}" alt="" loading="lazy">
+    {% if section.settings.heading != blank %}
+      <div class="feature__head">
+        <h2 class="feature__heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="feature__sub">{{ section.settings.subheading }}</p>
         {% endif %}
       </div>
+    {% endif %}
 
-      <div class="feature__col feature__col--right">
-        {% for block in section.blocks %}
-          {% if forloop.index > 2 %}
-            {% assign th = block.settings.thumb_handle | strip %}
-            {% assign thumb = all_products[th] %}
-            <div class="callout callout--right" {{ block.shopify_attributes }}>
-              <div class="callout__node"></div>
-              {% if thumb != blank and thumb.featured_media %}
-                <span class="callout__thumb"><img src="{{ thumb.featured_media | image_url: width: 200 }}" alt="" loading="lazy"></span>
-              {% endif %}
-              <div class="callout__text">
-                <h3 class="callout__title">{{ block.settings.title }}</h3>
-                <p class="callout__desc">{{ block.settings.text }}</p>
-                {% if block.settings.link_label != blank %}
-                  <a href="{{ block.settings.link }}" class="callout__link">{{ block.settings.link_label }} &rarr;</a>
-                {% endif %}
-              </div>
-            </div>
+    <div class="feature__grid">
+      {% for block in section.blocks %}
+        {% assign th = block.settings.thumb_handle | strip %}
+        {% assign thumb = all_products[th] %}
+        <div class="callout" {{ block.shopify_attributes }}>
+          {% if thumb != blank and thumb.featured_media %}
+            <span class="callout__thumb"><img src="{{ thumb.featured_media | image_url: width: 220 }}" alt="" loading="lazy"></span>
           {% endif %}
-        {% endfor %}
-      </div>
+          <h3 class="callout__title">{{ block.settings.title }}</h3>
+          <p class="callout__desc">{{ block.settings.text }}</p>
+          {% if block.settings.link_label != blank %}
+            <a href="{{ block.settings.link }}" class="callout__link">{{ block.settings.link_label }} &rarr;</a>
+          {% endif %}
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -59,74 +31,59 @@
 {% stylesheet %}
   .feature__panel {
     background:
-      radial-gradient(70% 80% at 50% 45%, rgba(26, 109, 240, 0.08) 0%, transparent 65%),
+      radial-gradient(80% 120% at 50% 0%, rgba(26, 109, 240, 0.1) 0%, transparent 60%),
       var(--color-card);
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3.5rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .feature__head {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .feature__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .feature__sub {
+    color: var(--color-muted);
+    margin: 0.6rem 0 0;
+    max-width: 36rem;
   }
 
   .feature__grid {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 1.05fr) 1fr;
-    align-items: center;
-    gap: clamp(0.5rem, 2vw, 1.5rem);
-  }
-
-  .feature__col {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: clamp(2.5rem, 7vw, 5.5rem);
-    height: 100%;
-    z-index: 2;
-  }
-
-  .feature__center {
-    position: relative;
-  }
-
-  .feature__center img {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    object-position: center 42%;
-    -webkit-mask-image: radial-gradient(70% 65% at 50% 48%, #000 55%, transparent 100%);
-    mask-image: radial-gradient(70% 65% at 50% 48%, #000 55%, transparent 100%);
-  }
-
-  .feature__center-placeholder {
-    width: 100%;
-    border-radius: 6px;
-  }
-
-  .feature__center-placeholder svg {
-    width: 100%;
-    opacity: 0.3;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
   }
 
   .callout {
     display: flex;
-    align-items: center;
-    gap: 0.85rem;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: clamp(1rem, 2vw, 1.75rem);
+    border-left: 1px solid var(--color-border);
   }
 
-  .callout--left {
-    text-align: right;
-  }
-
-  .callout__text {
-    flex: 1;
+  .callout:first-child {
+    border-left: none;
+    padding-left: 0;
   }
 
   .callout__thumb {
-    flex: 0 0 auto;
     width: 3.5rem;
     height: 3.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
+    margin-bottom: 1.1rem;
     background: radial-gradient(120% 120% at 50% 25%, #1a2233 0%, #0b0f18 100%);
     border: 1px solid var(--color-border);
   }
@@ -144,17 +101,18 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.5rem;
   }
 
   .callout__desc {
     color: var(--color-muted);
-    font-size: 0.82rem;
-    line-height: 1.45;
-    margin: 0 0 0.6rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0 0 0.9rem;
   }
 
   .callout__link {
+    margin-top: auto;
     font-family: var(--font-heading);
     font-size: 0.68rem;
     font-weight: 700;
@@ -168,58 +126,19 @@
     color: var(--color-accent);
   }
 
-  /* Connector node + line toward center */
-  .callout__node {
-    position: relative;
-    width: 0.6rem;
-    height: 0.6rem;
-    flex: 0 0 auto;
-    border-radius: 999px;
-    background: var(--color-accent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 25%, transparent);
-  }
-
-  .callout--left .callout__node::after,
-  .callout--right .callout__node::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: clamp(1rem, 3vw, 2.5rem);
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-accent), transparent);
-  }
-
-  .callout--left .callout__node::after {
-    left: 100%;
-  }
-
-  .callout--right .callout__node::before {
-    right: 100%;
-    background: linear-gradient(270deg, var(--color-accent), transparent);
-  }
-
   @media (max-width: 900px) {
     .feature__grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
     }
 
-    .feature__center {
-      grid-column: 1 / -1;
-      grid-row: 1;
-      max-width: 22rem;
-      margin: 0 auto 1.5rem;
-    }
-
-    .callout__node {
-      display: none;
-    }
-
-    .callout--left {
-      text-align: left;
+    .callout {
+      border-left: none;
+      padding-left: 0;
     }
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 480px) {
     .feature__grid {
       grid-template-columns: 1fr;
     }
@@ -230,11 +149,8 @@
 {
   "name": "Feature callouts",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Center image"
-    }
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading" }
   ],
   "blocks": [
     {
@@ -254,10 +170,7 @@
     {
       "name": "Feature callouts",
       "blocks": [
-        { "type": "callout", "settings": { "title": "Flight Ready", "text": "Built for any environment.", "link_label": "Shop Jackets" } },
-        { "type": "callout", "settings": { "title": "Hydrate Anywhere", "text": "Vacuum insulated. Mission approved.", "link_label": "Shop Drinkware" } },
-        { "type": "callout", "settings": { "title": "Premium Comfort", "text": "Quality materials. Timeless design.", "link_label": "Shop Apparel" } },
-        { "type": "callout", "settings": { "title": "Mission Heritage", "text": "Celebrate every milestone.", "link_label": "Shop Patches" } }
+        { "type": "callout" }, { "type": "callout" }, { "type": "callout" }, { "type": "callout" }
       ]
     }
   ]

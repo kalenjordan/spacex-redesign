@@ -25,7 +25,10 @@
     },
     "feature": {
       "type": "feature-callouts",
-      "settings": {},
+      "settings": {
+        "heading": "Built for the Mission",
+        "subheading": "Gear engineered to the same standard as the hardware that flies."
+      },
       "blocks": {
         "b1": { "type": "callout", "settings": { "title": "Flight Ready", "text": "Built for any environment.", "thumb_handle": "unisex-starship-heatshield-pullover-hoodie", "link_label": "Shop Outerwear", "link": "shopify://collections/flight-headwear" } },
         "b2": { "type": "callout", "settings": { "title": "Mission Patches", "text": "Collect every milestone.", "thumb_handle": "spcx-lift-off-mission-patch", "link_label": "Shop Patches", "link": "shopify://collections/mission-patches" } },
@@ -37,14 +40,16 @@
     "collections": {
       "type": "collection-grid",
       "settings": {
-        "heading": "Shop by Mission"
+        "heading": "Shop by Collection",
+        "link_label": "View All Collections",
+        "link_url": "shopify://collections"
       },
       "blocks": {
-        "c1": { "type": "item", "settings": { "collection": "mission-patches" } },
-        "c2": { "type": "item", "settings": { "collection": "starship-program" } },
-        "c3": { "type": "item", "settings": { "collection": "dragon-crew" } },
-        "c4": { "type": "item", "settings": { "collection": "flight-headwear" } },
-        "c5": { "type": "item", "settings": { "collection": "collectibles-models" } }
+        "c1": { "type": "item", "settings": { "collection": "men", "title": "Men", "image_asset": "collection-men.jpg" } },
+        "c2": { "type": "item", "settings": { "collection": "women", "title": "Women", "image_asset": "collection-women.jpg" } },
+        "c3": { "type": "item", "settings": { "collection": "kids", "title": "Kids", "image_asset": "collection-kids.jpg" } },
+        "c4": { "type": "item", "settings": { "collection": "accessories", "title": "Accessories", "image_asset": "collection-accessories.jpg" } },
+        "c5": { "type": "item", "settings": { "collection": "flight-shirts", "title": "Flight Shirts", "image_asset": "collection-flight-shirts.jpg" } }
       },
       "block_order": ["c1", "c2", "c3", "c4", "c5"]
     },

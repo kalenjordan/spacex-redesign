@@ -18,22 +18,19 @@
         if collection != blank
           assign url = collection.url
         endif
-        assign card_image = collection.featured_image
-        if card_image == blank and collection != blank
-          assign card_image = collection.products.first.featured_media
-        endif
       -%}
-      <a href="{{ url }}" class="theme-card" {{ block.shopify_attributes }}>
-        <div class="theme-card__media">
-          {% if card_image != blank %}
-            <img src="{{ card_image | image_url: width: 600 }}" alt="{{ title | escape }}" loading="lazy">
+      <a href="{{ url }}" class="lcard" {{ block.shopify_attributes }}>
+        <div class="lcard__media">
+          {% if block.settings.image_asset != blank %}
+            <img src="{{ block.settings.image_asset | asset_url }}" alt="{{ title | escape }}" loading="lazy">
           {% else %}
-            <div class="theme-card__placeholder">{{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            <div class="lcard__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
           {% endif %}
+          <div class="lcard__scrim"></div>
         </div>
-        <div class="theme-card__body">
-          <h3 class="theme-card__title">{{ title | default: 'Collection' }}</h3>
-          <span class="theme-card__cta">Shop Now &rarr;</span>
+        <div class="lcard__body">
+          <h3 class="lcard__title">{{ title | default: 'Collection' }}</h3>
+          <span class="lcard__cta">Shop Now &rarr;</span>
         </div>
       </a>
     {% endfor %}
@@ -47,60 +44,62 @@
     gap: 1rem;
   }
 
-  .theme-card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: var(--color-foreground);
-    background-color: var(--color-card);
-    border: 1px solid var(--color-border);
+  .lcard {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
     border-radius: 4px;
     overflow: hidden;
-    transition: border-color 0.18s ease, transform 0.18s ease;
+    text-decoration: none;
+    color: var(--color-foreground);
+    background: var(--color-card);
   }
 
-  .theme-card:hover {
-    border-color: var(--color-border-strong);
-    transform: translateY(-3px);
+  .lcard__media,
+  .lcard__media img,
+  .lcard__scrim {
+    position: absolute;
+    inset: 0;
   }
 
-  .theme-card__media {
-    aspect-ratio: 1 / 1;
-    background: radial-gradient(120% 120% at 50% 22%, #161d2c 0%, #0a0e16 100%);
-  }
-
-  .theme-card__media img {
+  .lcard__media img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    padding: 9%;
-    transition: transform 0.4s ease;
+    object-fit: cover;
+    transition: transform 0.5s ease;
   }
 
-  .theme-card:hover .theme-card__media img {
+  .lcard:hover .lcard__media img {
     transform: scale(1.05);
   }
 
-  .theme-card__placeholder svg {
+  .lcard__placeholder svg {
     width: 100%;
     height: 100%;
     opacity: 0.3;
   }
 
-  .theme-card__body {
-    padding: 1rem 1.1rem 1.25rem;
+  .lcard__scrim {
+    background: linear-gradient(0deg, rgba(4, 6, 12, 0.92) 0%, rgba(4, 6, 12, 0.15) 45%, transparent 70%);
   }
 
-  .theme-card__title {
+  .lcard__body {
+    position: absolute;
+    left: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 2;
+  }
+
+  .lcard__title {
     font-family: var(--font-heading);
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     margin: 0 0 0.35rem;
   }
 
-  .theme-card__cta {
+  .lcard__cta {
     font-family: var(--font-heading);
     font-size: 0.65rem;
     font-weight: 700;
@@ -110,7 +109,7 @@
     transition: color 0.15s ease;
   }
 
-  .theme-card:hover .theme-card__cta {
+  .lcard:hover .lcard__cta {
     color: var(--color-accent);
   }
 
@@ -129,26 +128,27 @@
 
 {% schema %}
 {
-  "name": "Theme grid",
+  "name": "Collection grid",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Mission" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Collection" },
     { "type": "text", "id": "link_label", "label": "Link label" },
     { "type": "url", "id": "link_url", "label": "Link URL" }
   ],
   "blocks": [
     {
       "type": "item",
-      "name": "Theme",
+      "name": "Collection",
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
-        { "type": "text", "id": "title", "label": "Title override" }
+        { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "text", "id": "image_asset", "label": "Lifestyle image (asset filename)" }
       ]
     }
   ],
   "max_blocks": 6,
   "presets": [
     {
-      "name": "Theme grid"
+      "name": "Collection grid"
     }
   ]
 }

@@ -38,22 +38,6 @@
   </div>
 
   <div class="product-card__body">
-    {%- if product != blank -%}
-      {%- assign color_option = null -%}
-      {%- for option in product.options_with_values -%}
-        {%- if option.name contains 'Color' or option.name contains 'Colour' -%}
-          {%- assign color_option = option -%}
-        {%- endif -%}
-      {%- endfor -%}
-      {%- if color_option -%}
-        <div class="product-card__swatches">
-          {%- for value in color_option.values limit: 6 -%}
-            <span class="swatch" style="background: {{ value | downcase | replace: ' ', '' }};" title="{{ value }}"></span>
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
-    {%- endif -%}
-
     <h3 class="product-card__title">
       {% if product != blank %}{{ product.title }}{% else %}SpaceX Gear{% endif %}
     </h3>
