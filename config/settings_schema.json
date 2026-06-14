@@ -59,14 +59,32 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
+        "default": "#05070D",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#FFFFFF",
         "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#1A6DF0",
+        "label": "Accent"
+      },
+      {
+        "type": "color",
+        "id": "card_color",
+        "default": "#0E1320",
+        "label": "Card surface"
+      },
+      {
+        "type": "color",
+        "id": "muted_color",
+        "default": "#8A93A6",
+        "label": "Muted text"
       },
       {
         "type": "range",
@@ -76,7 +94,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
-        "default": 4
+        "default": 2
       }
     ]
   }
