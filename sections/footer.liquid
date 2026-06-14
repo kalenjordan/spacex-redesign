@@ -3,7 +3,7 @@
     <div class="site-footer__top">
       <div class="site-footer__brand">
         <a href="{{ routes.root_url }}" class="wordmark site-footer__wordmark">
-          {{ section.settings.brand_text | default: shop.name }}
+          <img class="wordmark__img" src="{{ 'spacex-logo.png' | asset_url }}" alt="{{ shop.name }}">
         </a>
         {% if section.settings.description != blank %}
           <p class="site-footer__desc">{{ section.settings.description }}</p>
@@ -73,9 +73,12 @@
   }
 
   .site-footer__wordmark {
-    font-size: 1.4rem;
     display: inline-block;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .site-footer__wordmark .wordmark__img {
+    height: 1.9rem;
   }
 
   .site-footer__desc {

@@ -1,11 +1,12 @@
 <header class="site-header full-width" data-header>
   <div class="site-header__inner">
     <a href="{{ routes.root_url }}" class="wordmark" aria-label="{{ shop.name }}">
-      {%- if section.settings.brand_text != blank -%}
-        {{ section.settings.brand_text }}
+      {%- if section.settings.logo != blank -%}
+        <img class="wordmark__img" src="{{ section.settings.logo | image_url: width: 600 }}" alt="{{ shop.name }}">
       {%- else -%}
-        {{ shop.name }}
+        <img class="wordmark__img" src="{{ 'spacex-logo.png' | asset_url }}" alt="{{ shop.name }}">
       {%- endif -%}
+      <img class="wordmark__mark" src="{{ 'x.png' | asset_url }}" alt="{{ shop.name }}">
     </a>
 
     <nav class="site-nav" aria-label="Primary">
@@ -65,14 +66,20 @@
 
   .wordmark {
     justify-self: start;
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.55rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--color-foreground);
+    display: inline-flex;
+    align-items: center;
     line-height: 1;
+  }
+
+  .wordmark__img {
+    height: 1.5rem;
+    width: auto;
+  }
+
+  .wordmark__mark {
+    display: none;
+    height: 1.6rem;
+    width: auto;
   }
 
   .site-nav {
@@ -157,6 +164,16 @@
       gap: 1.1rem;
     }
   }
+
+  @media (max-width: 600px) {
+    .wordmark__img {
+      display: none;
+    }
+
+    .wordmark__mark {
+      display: block;
+    }
+  }
 {% endstylesheet %}
 
 <script>
@@ -176,10 +193,9 @@
   "name": "t:general.header",
   "settings": [
     {
-      "type": "text",
-      "id": "brand_text",
-      "label": "Brand wordmark",
-      "default": "SPACEX"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo (overrides bundled SpaceX logo)"
     },
     {
       "type": "link_list",

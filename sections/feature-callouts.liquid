@@ -22,7 +22,7 @@
         {% if section.settings.image != blank %}
           <img src="{{ section.settings.image | image_url: width: 900 }}" alt="" width="900" height="900" loading="lazy">
         {% else %}
-          <div class="feature__center-placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+          <img src="{{ 'middle-rocket.png' | asset_url }}" alt="" loading="lazy">
         {% endif %}
       </div>
 
