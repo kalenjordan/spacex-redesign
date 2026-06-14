@@ -9,25 +9,30 @@
   <div class="collection-grid__row">
     {% for block in section.blocks %}
       {%- liquid
-        assign card_handle = block.settings.product_handle | strip
-        assign product = all_products[card_handle]
+        assign collection = block.settings.collection
+        assign title = block.settings.title
+        if title == blank and collection != blank
+          assign title = collection.title
+        endif
         assign url = '#'
-        if block.settings.link != blank
-          assign url = block.settings.link
-        elsif product != blank and product.id
-          assign url = product.url
+        if collection != blank
+          assign url = collection.url
+        endif
+        assign card_image = collection.featured_image
+        if card_image == blank and collection != blank
+          assign card_image = collection.products.first.featured_media
         endif
       -%}
       <a href="{{ url }}" class="theme-card" {{ block.shopify_attributes }}>
         <div class="theme-card__media">
-          {% if product != blank and product.id %}
-            <img src="{{ 'cut-' | append: card_handle | append: '.png' | asset_url }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+          {% if card_image != blank %}
+            <img src="{{ card_image | image_url: width: 600 }}" alt="{{ title | escape }}" loading="lazy">
           {% else %}
             <div class="theme-card__placeholder">{{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}</div>
           {% endif %}
         </div>
         <div class="theme-card__body">
-          <h3 class="theme-card__title">{{ block.settings.title | default: 'Collection' }}</h3>
+          <h3 class="theme-card__title">{{ title | default: 'Collection' }}</h3>
           <span class="theme-card__cta">Shop Now &rarr;</span>
         </div>
       </a>
@@ -135,9 +140,8 @@
       "type": "item",
       "name": "Theme",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Mission Patches" },
-        { "type": "text", "id": "product_handle", "label": "Representative product handle" },
-        { "type": "url", "id": "link", "label": "Link override" }
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Title override" }
       ]
     }
   ],

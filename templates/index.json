@@ -17,9 +17,10 @@
       "type": "product-carousel",
       "settings": {
         "heading": "Trending Now",
-        "product_handles": "spcx-adjustable-cap, spacex-tote-i-love-spcx-blk, spcx-lift-off-mission-patch, premium-womens-spcx-lift-off-t-shirt, spacex-unisex-the-future-is-public-t-shirt, unisex-starlink-dodger-dog-t-shirt, starbase-city-performance-hat, unisex-dragon-schematic-t-shirt",
+        "collection": "trending-now",
         "force_badge": true,
-        "link_label": "View All"
+        "link_label": "View All",
+        "link_url": "shopify://collections/trending-now"
       }
     },
     "feature": {
@@ -39,11 +40,11 @@
         "heading": "Shop by Mission"
       },
       "blocks": {
-        "c1": { "type": "item", "settings": { "title": "Mission Patches", "product_handle": "spcx-lift-off-mission-patch" } },
-        "c2": { "type": "item", "settings": { "title": "Starship Program", "product_handle": "unisex-starship-milestone-v3-t2-t-shirt" } },
-        "c3": { "type": "item", "settings": { "title": "Dragon & Crew", "product_handle": "unisex-dragon-schematic-t-shirt" } },
-        "c4": { "type": "item", "settings": { "title": "Flight Headwear", "product_handle": "spcx-adjustable-cap" } },
-        "c5": { "type": "item", "settings": { "title": "Collectibles & Models", "product_handle": "super-heavy-chrome-model" } }
+        "c1": { "type": "item", "settings": { "collection": "mission-patches" } },
+        "c2": { "type": "item", "settings": { "collection": "starship-program" } },
+        "c3": { "type": "item", "settings": { "collection": "dragon-crew" } },
+        "c4": { "type": "item", "settings": { "collection": "flight-headwear" } },
+        "c5": { "type": "item", "settings": { "collection": "collectibles-models" } }
       },
       "block_order": ["c1", "c2", "c3", "c4", "c5"]
     },
@@ -51,9 +52,10 @@
       "type": "product-carousel",
       "settings": {
         "heading": "Collectibles & Mission Gear",
-        "product_handles": "starship-magnetic-building-tiles, spacex-key-clip-and-dock, spacex-crew-dragon-plush, spacex-starship-flight-6-banana, spacex-dragon-scale-model, spacex-iva-suit-figure-pre-sale, super-heavy-chrome-model",
+        "collection": "collectibles-models",
         "force_badge": false,
-        "link_label": "View All"
+        "link_label": "View All",
+        "link_url": "shopify://collections/collectibles-models"
       }
     },
     "newsletter": {

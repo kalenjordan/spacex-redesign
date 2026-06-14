@@ -3,6 +3,7 @@
   Accepts:
   - product: {Product} product object (optional — placeholder shown when blank)
   - placeholder_index: {Number} index used to vary placeholder art
+  - force_badge: {Boolean} force the NEW badge
 {% endcomment %}
 
 {%- liquid
@@ -16,18 +17,11 @@
   assign ph = placeholder_index | modulo: 4 | plus: 1
 -%}
 
-<a class="product-card{% if cutout %} product-card--cut{% endif %}" {% if product != blank %}href="{{ product.url }}"{% else %}href="#"{% endif %}>
+<a class="product-card" {% if product != blank %}href="{{ product.url }}"{% else %}href="#"{% endif %}>
   <div class="product-card__media">
     {% if is_new %}<span class="badge product-card__badge">New</span>{% endif %}
 
-    {% if cutout and product != blank %}
-      <img
-        class="product-card__img"
-        src="{{ 'cut-' | append: product.handle | append: '.png' | asset_url }}"
-        alt="{{ product.title | escape }}"
-        loading="lazy"
-      >
-    {% elsif product != blank and product.featured_media %}
+    {% if product != blank and product.featured_media %}
       <img
         class="product-card__img"
         src="{{ product.featured_media | image_url: width: 700 }}"
@@ -58,12 +52,6 @@
           {%- endfor -%}
         </div>
       {%- endif -%}
-    {%- else -%}
-      <div class="product-card__swatches">
-        <span class="swatch" style="background:#111;"></span>
-        <span class="swatch" style="background:#3a3a3a;"></span>
-        <span class="swatch" style="background:#6b6b6b;"></span>
-      </div>
     {%- endif -%}
 
     <h3 class="product-card__title">
