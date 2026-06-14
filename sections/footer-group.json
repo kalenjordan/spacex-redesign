@@ -13,9 +13,30 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "main-menu" }
+        },
+        "care": {
+          "type": "menu",
+          "settings": { "heading": "Customer Care", "menu": "footer" }
+        },
+        "about": {
+          "type": "menu",
+          "settings": { "heading": "About SpaceX", "menu": "footer" }
+        },
+        "legal": {
+          "type": "menu",
+          "settings": { "heading": "Legal", "menu": "footer" }
+        }
+      },
+      "block_order": ["shop", "care", "about", "legal"],
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "brand_text": "SPACEX",
+        "x_url": "https://x.com/spacex",
+        "instagram_url": "https://instagram.com/spacex",
+        "youtube_url": "https://youtube.com/spacex"
       }
     }
   },

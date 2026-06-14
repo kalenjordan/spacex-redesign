@@ -22,11 +22,11 @@
   <div class="carousel__track" data-carousel-track>
     {% if count > 0 %}
       {% for product in products limit: section.settings.max_products %}
-        {% render 'product-card', product: product, placeholder_index: forloop.index %}
+        {% render 'product-card', product: product, placeholder_index: forloop.index, force_badge: section.settings.force_badge %}
       {% endfor %}
     {% else %}
       {% for i in (1..5) %}
-        {% render 'product-card', placeholder_index: i %}
+        {% render 'product-card', placeholder_index: i, force_badge: section.settings.force_badge %}
       {% endfor %}
     {% endif %}
   </div>
@@ -206,6 +206,12 @@
       "step": 1,
       "label": "Max products",
       "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "force_badge",
+      "label": "Show NEW badge on all cards",
+      "default": false
     },
     {
       "type": "text",

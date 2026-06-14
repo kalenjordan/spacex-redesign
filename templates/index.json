@@ -17,12 +17,55 @@
       "type": "product-carousel",
       "settings": {
         "heading": "Trending Now",
+        "force_badge": true,
         "link_label": "View All"
       }
+    },
+    "feature": {
+      "type": "feature-callouts",
+      "settings": {},
+      "blocks": {
+        "b1": { "type": "callout", "settings": { "title": "Flight Ready", "text": "Built for any environment.", "link_label": "Shop Jackets" } },
+        "b2": { "type": "callout", "settings": { "title": "Hydrate Anywhere", "text": "Vacuum insulated. Mission approved.", "link_label": "Shop Drinkware" } },
+        "b3": { "type": "callout", "settings": { "title": "Premium Comfort", "text": "Quality materials. Timeless design.", "link_label": "Shop Apparel" } },
+        "b4": { "type": "callout", "settings": { "title": "Mission Heritage", "text": "Celebrate every milestone.", "link_label": "Shop Patches" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"]
+    },
+    "collections": {
+      "type": "collection-grid",
+      "settings": {
+        "heading": "Shop by Collection",
+        "link_label": "View All Collections"
+      },
+      "blocks": {
+        "c1": { "type": "item", "settings": { "title": "Men" } },
+        "c2": { "type": "item", "settings": { "title": "Women" } },
+        "c3": { "type": "item", "settings": { "title": "Kids" } },
+        "c4": { "type": "item", "settings": { "title": "Accessories" } },
+        "c5": { "type": "item", "settings": { "title": "Flight Shirts" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"]
+    },
+    "collectibles": {
+      "type": "product-carousel",
+      "settings": {
+        "heading": "Collectibles & Mission Gear",
+        "force_badge": false,
+        "link_label": "View All"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
     }
   },
   "order": [
     "hero",
-    "trending"
+    "trending",
+    "feature",
+    "collections",
+    "collectibles",
+    "newsletter"
   ]
 }

@@ -10,6 +10,10 @@
   if product != blank and product.tags contains 'new'
     assign is_new = true
   endif
+  if force_badge
+    assign is_new = true
+  endif
+  assign ph = placeholder_index | modulo: 4 | plus: 1
 -%}
 
 <a class="product-card" {% if product != blank %}href="{{ product.url }}"{% else %}href="#"{% endif %}>
@@ -27,7 +31,7 @@
       >
     {% else %}
       <div class="product-card__img product-card__img--placeholder">
-        {{ 'product-apparel-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+        {{ 'product-apparel-' | append: ph | placeholder_svg_tag: 'placeholder-svg' }}
       </div>
     {% endif %}
   </div>
