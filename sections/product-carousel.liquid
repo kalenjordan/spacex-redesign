@@ -35,7 +35,7 @@
         {% assign card_handle = h | strip %}
         {% assign product = all_products[card_handle] %}
         {% if product != blank and product.id %}
-          {% render 'product-card', product: product, placeholder_index: forloop.index, force_badge: section.settings.force_badge %}
+          {% render 'product-card', product: product, placeholder_index: forloop.index, force_badge: section.settings.force_badge, cutout: true %}
         {% endif %}
       {% endfor %}
     {% elsif count > 0 %}
@@ -119,6 +119,15 @@
     position: relative;
     aspect-ratio: 1 / 1;
     background: linear-gradient(180deg, #f5f6f8 0%, #e9ebf0 100%);
+  }
+
+  /* Cutout cards sit on a dark surface with transparent product PNGs */
+  .product-card--cut .product-card__media {
+    background: radial-gradient(120% 120% at 50% 22%, #161d2c 0%, #0a0e16 100%);
+  }
+
+  .product-card--cut .product-card__img {
+    padding: 9%;
   }
 
   .product-card__badge {

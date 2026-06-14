@@ -20,8 +20,8 @@
       -%}
       <a href="{{ url }}" class="theme-card" {{ block.shopify_attributes }}>
         <div class="theme-card__media">
-          {% if product != blank and product.featured_media %}
-            <img src="{{ product.featured_media | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" width="600" height="600" loading="lazy">
+          {% if product != blank and product.id %}
+            <img src="{{ 'cut-' | append: card_handle | append: '.png' | asset_url }}" alt="{{ block.settings.title | escape }}" loading="lazy">
           {% else %}
             <div class="theme-card__placeholder">{{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}</div>
           {% endif %}
@@ -61,7 +61,7 @@
 
   .theme-card__media {
     aspect-ratio: 1 / 1;
-    background: linear-gradient(180deg, #f5f6f8 0%, #e9ebf0 100%);
+    background: radial-gradient(120% 120% at 50% 22%, #161d2c 0%, #0a0e16 100%);
   }
 
   .theme-card__media img {
