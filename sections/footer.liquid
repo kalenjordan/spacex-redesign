@@ -28,16 +28,45 @@
       </div>
 
       <div class="site-footer__menus">
-        {% for block in section.blocks %}
-          <div class="footer-col" {{ block.shopify_attributes }}>
-            <h4 class="footer-col__title">{{ block.settings.heading }}</h4>
-            <ul class="footer-col__links">
-              {% for link in block.settings.menu.links %}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endfor %}
+        <div class="footer-col">
+          <h4 class="footer-col__title">Shop</h4>
+          <ul class="footer-col__links">
+            <li><a href="{{ routes.collections_url }}/men">Men</a></li>
+            <li><a href="{{ routes.collections_url }}/women">Women</a></li>
+            <li><a href="{{ routes.collections_url }}/kids">Kids</a></li>
+            <li><a href="{{ routes.collections_url }}/accessories">Accessories</a></li>
+            <li><a href="{{ routes.collections_url }}/flight-shirts">Flight Shirts</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col__title">Customer Care</h4>
+          <ul class="footer-col__links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Shipping &amp; Returns</a></li>
+            <li><a href="#">Sizing Guide</a></li>
+            <li><a href="{{ routes.search_url }}">Contact Us</a></li>
+            <li><a href="#">Gift Cards</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col__title">About SpaceX</h4>
+          <ul class="footer-col__links">
+            <li><a href="https://www.spacex.com/mission/">Our Mission</a></li>
+            <li><a href="https://www.spacex.com/careers/">Careers</a></li>
+            <li><a href="https://www.spacex.com/updates/">Press</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="https://www.starlink.com/">Starlink</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-col__title">Legal</h4>
+          <ul class="footer-col__links">
+            <li><a href="{{ shop.terms_of_service.url | default: '#' }}">Terms of Use</a></li>
+            <li><a href="{{ shop.privacy_policy.url | default: '#' }}">Privacy Policy</a></li>
+            <li><a href="#">Cookies</a></li>
+            <li><a href="#">Accessibility</a></li>
+          </ul>
+        </div>
       </div>
     </div>
 

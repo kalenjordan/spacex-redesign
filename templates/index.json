@@ -27,10 +27,10 @@
       "type": "feature-callouts",
       "settings": {},
       "blocks": {
-        "b1": { "type": "callout", "settings": { "title": "Flight Ready", "text": "Built for any environment.", "link_label": "Shop Outerwear" } },
-        "b2": { "type": "callout", "settings": { "title": "Mission Patches", "text": "Collect every milestone.", "link_label": "Shop Patches" } },
-        "b3": { "type": "callout", "settings": { "title": "Premium Comfort", "text": "Quality materials. Timeless design.", "link_label": "Shop Apparel" } },
-        "b4": { "type": "callout", "settings": { "title": "Mission Heritage", "text": "Models, plush & collectibles.", "link_label": "Shop Collectibles" } }
+        "b1": { "type": "callout", "settings": { "title": "Flight Ready", "text": "Built for any environment.", "thumb_handle": "unisex-starship-heatshield-pullover-hoodie", "link_label": "Shop Outerwear", "link": "shopify://collections/flight-headwear" } },
+        "b2": { "type": "callout", "settings": { "title": "Mission Patches", "text": "Collect every milestone.", "thumb_handle": "spcx-lift-off-mission-patch", "link_label": "Shop Patches", "link": "shopify://collections/mission-patches" } },
+        "b3": { "type": "callout", "settings": { "title": "Premium Comfort", "text": "Quality materials. Timeless design.", "thumb_handle": "unisex-dragon-schematic-t-shirt", "link_label": "Shop Apparel", "link": "shopify://collections/starship-program" } },
+        "b4": { "type": "callout", "settings": { "title": "Mission Heritage", "text": "Models, plush & collectibles.", "thumb_handle": "super-heavy-chrome-model", "link_label": "Shop Collectibles", "link": "shopify://collections/collectibles-models" } }
       },
       "block_order": ["b1", "b2", "b3", "b4"]
     },
