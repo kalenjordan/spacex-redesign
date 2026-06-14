@@ -1,5 +1,8 @@
 {%- liquid
   assign products = section.settings.collection.products
+  if section.settings.collection == blank or products.size == 0
+    assign products = collections.all.products
+  endif
   assign count = products.size
 -%}
 
