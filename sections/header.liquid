@@ -4,9 +4,8 @@
       {%- if section.settings.logo != blank -%}
         <img class="wordmark__img" src="{{ section.settings.logo | image_url: width: 600 }}" alt="{{ shop.name }}">
       {%- else -%}
-        <img class="wordmark__img" src="{{ 'spacex-logo.png' | asset_url }}" alt="{{ shop.name }}">
+        {{ 'spacex-logo.svg' | inline_asset_content }}
       {%- endif -%}
-      <img class="wordmark__mark" src="{{ 'x.png' | asset_url }}" alt="{{ shop.name }}">
     </a>
 
     <nav class="site-nav" aria-label="Primary">
@@ -71,15 +70,11 @@
     line-height: 1;
   }
 
-  .wordmark__img {
-    height: 1.5rem;
+  .wordmark__img,
+  .wordmark svg {
+    height: 1.05rem;
     width: auto;
-  }
-
-  .wordmark__mark {
-    display: none;
-    height: 1.6rem;
-    width: auto;
+    display: block;
   }
 
   .site-nav {
@@ -165,15 +160,6 @@
     }
   }
 
-  @media (max-width: 600px) {
-    .wordmark__img {
-      display: none;
-    }
-
-    .wordmark__mark {
-      display: block;
-    }
-  }
 {% endstylesheet %}
 
 <script>
