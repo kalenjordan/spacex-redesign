@@ -12,9 +12,17 @@
     "hero": {
       "type": "hero",
       "settings": {}
+    },
+    "trending": {
+      "type": "product-carousel",
+      "settings": {
+        "heading": "Trending Now",
+        "link_label": "View All"
+      }
     }
   },
   "order": [
-    "hero"
+    "hero",
+    "trending"
   ]
 }

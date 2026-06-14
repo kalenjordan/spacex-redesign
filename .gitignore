@@ -9,6 +9,15 @@ ehthumbs.db
 Thumbs.db
 node_modules/
 
+# Package manager / build caches
+.cache/
+.npm/
+
+# Local preview & tooling artifacts
+.playwright-mcp/
+/*.png
+*.log
+
 # Shopify CLI files
 .shopify/
 

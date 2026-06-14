@@ -1,0 +1,228 @@
+{%- liquid
+  assign products = section.settings.collection.products
+  assign count = products.size
+-%}
+
+<section class="carousel" data-carousel>
+  <div class="section-head">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="section-eyebrow text-muted">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    <div class="carousel__controls">
+      {% if section.settings.link_label != blank %}
+        <a href="{{ section.settings.link_url }}" class="section-link">{{ section.settings.link_label }} &rsaquo;</a>
+      {% endif %}
+      <button class="carousel__arrow" data-carousel-next aria-label="Next">&rarr;</button>
+    </div>
+  </div>
+
+  <div class="carousel__track" data-carousel-track>
+    {% if count > 0 %}
+      {% for product in products limit: section.settings.max_products %}
+        {% render 'product-card', product: product, placeholder_index: forloop.index %}
+      {% endfor %}
+    {% else %}
+      {% for i in (1..5) %}
+        {% render 'product-card', placeholder_index: i %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .carousel {
+    width: 100%;
+  }
+
+  .carousel__controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .carousel__arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+    background: transparent;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .carousel__arrow:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .carousel__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(15.5rem, 1fr);
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Product card */
+  .product-card {
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--color-foreground);
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .product-card:hover {
+    border-color: var(--color-border-strong);
+    transform: translateY(-3px);
+  }
+
+  .product-card__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: radial-gradient(120% 120% at 50% 20%, #161b27 0%, #0b0f18 100%);
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    z-index: 2;
+  }
+
+  .product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-card__img--placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.25;
+  }
+
+  .product-card__body {
+    padding: 1.1rem 1.15rem 1.35rem;
+  }
+
+  .product-card__swatches {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .swatch {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+  }
+
+  .product-card__title {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.3rem;
+  }
+
+  .product-card__meta {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .product-card__price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-carousel]').forEach(function (root) {
+      var track = root.querySelector('[data-carousel-track]');
+      var next = root.querySelector('[data-carousel-next]');
+      if (!track || !next) return;
+      next.addEventListener('click', function () {
+        var card = track.querySelector('.product-card');
+        var step = card ? card.offsetWidth + 20 : 300;
+        var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+        track.scrollBy({ left: atEnd ? -track.scrollWidth : step * 2, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Trending Now"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "label": "Max products",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product carousel"
+    }
+  ]
+}
+{% endschema %}
