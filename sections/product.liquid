@@ -1,45 +1,351 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Product page — dark two-column layout: media gallery + buy box.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+{%- assign current_variant = product.selected_or_first_available_variant -%}
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
+<div class="pdp">
+  <div class="pdp__gallery">
+    <div class="pdp__main">
+      {% if product.featured_media %}
+        <img
+          class="pdp__main-img"
+          data-pdp-main
+          src="{{ product.featured_media | image_url: width: 1100 }}"
+          alt="{{ product.featured_media.alt | escape }}"
+          width="1100"
+          height="1100"
         >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+      {% else %}
+        <div class="pdp__main-img">{{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+      {% endif %}
+    </div>
 
-    <input type="text" name="quantity" min="1" value="1">
+    {% if product.images.size > 1 %}
+      <div class="pdp__thumbs">
+        {% for image in product.images %}
+          <button
+            type="button"
+            class="pdp__thumb{% if forloop.first %} is-active{% endif %}"
+            data-pdp-thumb
+            data-src="{{ image | image_url: width: 1100 }}"
+            aria-label="View image {{ forloop.index }}"
+          >
+            <img src="{{ image | image_url: width: 220 }}" alt="" loading="lazy">
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+  <div class="pdp__info">
+    {% if product.type != blank %}
+      <p class="eyebrow pdp__eyebrow">{{ product.type }}</p>
+    {% endif %}
+    <h1 class="pdp__title">{{ product.title }}</h1>
+    <p class="pdp__price" data-pdp-price>{{ current_variant.price | money }}</p>
+
+    {% form 'product', product, class: 'pdp__form' %}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" data-pdp-id>
+
+      {% unless product.has_only_default_variant %}
+        {% for option in product.options_with_values %}
+          <div class="pdp__option">
+            <label class="pdp__option-label" for="opt-{{ forloop.index }}">{{ option.name }}</label>
+            <div class="select-wrap">
+              <select id="opt-{{ forloop.index }}" class="pdp__select" data-pdp-option="{{ forloop.index0 }}">
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        {% endfor %}
+      {% endunless %}
+
+      <div class="pdp__buy">
+        <div class="pdp__qty">
+          <button type="button" class="pdp__qty-btn" data-qty-down aria-label="Decrease">&minus;</button>
+          <input type="number" name="quantity" value="1" min="1" class="pdp__qty-input" data-qty>
+          <button type="button" class="pdp__qty-btn" data-qty-up aria-label="Increase">+</button>
+        </div>
+        <button type="submit" class="btn btn--primary pdp__add" data-pdp-add {% unless current_variant.available %}disabled{% endunless %}>
+          <span data-pdp-add-label>{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
+        </button>
+      </div>
+
+      {{ form | payment_button }}
+    {% endform %}
+
+    {% if product.description != blank %}
+      <div class="pdp__desc rte">{{ product.description }}</div>
+    {% endif %}
+  </div>
 </div>
+
+<script>
+  (function () {
+    var root = document.currentScript.closest('.shopify-section') || document;
+
+    // Gallery thumbnails
+    var main = root.querySelector('[data-pdp-main]');
+    root.querySelectorAll('[data-pdp-thumb]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (main) main.src = btn.getAttribute('data-src');
+        root.querySelectorAll('[data-pdp-thumb]').forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+      });
+    });
+
+    // Quantity stepper
+    var qty = root.querySelector('[data-qty]');
+    var up = root.querySelector('[data-qty-up]');
+    var down = root.querySelector('[data-qty-down]');
+    if (up) up.addEventListener('click', function () { qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + 1); });
+    if (down) down.addEventListener('click', function () { qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) - 1); });
+
+    // Variant selection
+    var variants = {{ product.variants | json }};
+    var selects = root.querySelectorAll('[data-pdp-option]');
+    var idField = root.querySelector('[data-pdp-id]');
+    var priceEl = root.querySelector('[data-pdp-price]');
+    var addBtn = root.querySelector('[data-pdp-add]');
+    var addLabel = root.querySelector('[data-pdp-add-label]');
+
+    function money(cents) {
+      return '$' + (cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function update() {
+      var chosen = Array.prototype.map.call(selects, function (s) { return s.value; });
+      var match = variants.find(function (v) {
+        return chosen.every(function (val, i) { return v.options[i] === val; });
+      });
+      if (!match) return;
+      idField.value = match.id;
+      if (priceEl) priceEl.textContent = money(match.price);
+      if (addBtn) {
+        addBtn.disabled = !match.available;
+        addLabel.textContent = match.available ? 'Add to Cart' : 'Sold Out';
+      }
+    }
+    selects.forEach(function (s) { s.addEventListener('change', update); });
+  })();
+</script>
+
+{% stylesheet %}
+  .pdp {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+    padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 5rem);
+  }
+
+  .pdp__main {
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: radial-gradient(120% 120% at 50% 22%, #161d2c 0%, #0a0e16 100%);
+  }
+
+  .pdp__main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pdp__main-img svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.25;
+  }
+
+  .pdp__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+  }
+
+  .pdp__thumb {
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-card);
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+
+  .pdp__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pdp__thumb.is-active,
+  .pdp__thumb:hover {
+    border-color: var(--color-accent);
+  }
+
+  .pdp__info {
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+  }
+
+  .pdp__eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  .pdp__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    margin: 0 0 1rem;
+  }
+
+  .pdp__price {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 2rem;
+  }
+
+  .pdp__option {
+    margin-bottom: 1.25rem;
+  }
+
+  .pdp__option-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .select-wrap {
+    position: relative;
+  }
+
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 1.5px solid var(--color-muted);
+    border-bottom: 1.5px solid var(--color-muted);
+    transform: translateY(-65%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .pdp__select {
+    width: 100%;
+    appearance: none;
+    background: var(--color-card);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--style-border-radius-inputs);
+    color: var(--color-foreground);
+    padding: 0.85rem 2.5rem 0.85rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  .pdp__buy {
+    display: flex;
+    gap: 0.75rem;
+    margin: 1.75rem 0 0.75rem;
+  }
+
+  .pdp__qty {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--style-border-radius-inputs);
+    overflow: hidden;
+    flex: 0 0 auto;
+  }
+
+  .pdp__qty-btn {
+    width: 2.75rem;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: var(--color-foreground);
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .pdp__qty-btn:hover {
+    background: var(--color-card);
+  }
+
+  .pdp__qty-input {
+    width: 3rem;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    font: inherit;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .pdp__qty-input::-webkit-outer-spin-button,
+  .pdp__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .pdp__add {
+    flex: 1;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+
+  .pdp__add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .shopify-payment-button {
+    margin-top: 0.5rem;
+  }
+
+  .pdp__desc {
+    margin-top: 2.25rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted);
+    line-height: 1.65;
+    font-size: 0.95rem;
+  }
+
+  .pdp__desc :is(h2, h3, h4) {
+    color: var(--color-foreground);
+  }
+
+  @media (max-width: 860px) {
+    .pdp {
+      grid-template-columns: 1fr;
+    }
+
+    .pdp__info {
+      position: static;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
