@@ -154,11 +154,6 @@ a {
   margin-top: clamp(3.5rem, 7vw, 6rem);
 }
 
-/** Footer sits flush against the preceding band */
-.shopify-section:has(.site-footer) {
-  margin-top: 0;
-}
-
 /** Buttons */
 .btn {
   display: inline-flex;

@@ -62,10 +62,6 @@
         "link_label": "View All",
         "link_url": "shopify://collections/collectibles-models"
       }
-    },
-    "newsletter": {
-      "type": "newsletter",
-      "settings": {}
     }
   },
   "order": [
@@ -73,7 +69,6 @@
     "trending",
     "feature",
     "collections",
-    "collectibles",
-    "newsletter"
+    "collectibles"
   ]
 }
