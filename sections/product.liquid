@@ -129,6 +129,41 @@
       }
     }
     selects.forEach(function (s) { s.addEventListener('change', update); });
+
+    // Add to cart via AJAX — stay on the page, update the cart count
+    var form = root.querySelector('.pdp__form');
+    if (form && addBtn) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (addBtn.disabled) return;
+        var original = addLabel.textContent;
+        addBtn.disabled = true;
+        addLabel.textContent = 'Adding…';
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form)
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error('add failed');
+            return fetch('/cart.js', { headers: { Accept: 'application/json' } });
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (cart) {
+            document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+              el.textContent = cart.item_count;
+            });
+            addLabel.textContent = 'Added ✓';
+            addBtn.disabled = false;
+            setTimeout(function () { addLabel.textContent = original; }, 2000);
+          })
+          .catch(function () {
+            addBtn.disabled = false;
+            addLabel.textContent = original;
+            form.submit();
+          });
+      });
+    }
   })();
 </script>
 
