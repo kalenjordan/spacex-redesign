@@ -23,6 +23,23 @@
         "link_url": "shopify://collections/trending-now"
       }
     },
+    "uniform": {
+      "type": "uniform",
+      "settings": {
+        "eyebrow": "Apparel System",
+        "heading": "The Uniform",
+        "button_label": "Shop the Uniform",
+        "button_link": "shopify://collections/men"
+      },
+      "blocks": {
+        "u1": { "type": "item", "settings": { "label": "Hoodie", "text": "Midweight fleece pullover with the SpaceX wordmark. Built for every day.", "pos_x": 33, "pos_y": 40, "label_side": "right" } },
+        "u2": { "type": "item", "settings": { "label": "Tee", "text": "Premium cotton crew with a clean embroidered mark.", "pos_x": 37, "pos_y": 72, "label_side": "right" } },
+        "u3": { "type": "item", "settings": { "label": "Cap", "text": "Structured six-panel cap with the SpaceX X.", "pos_x": 62, "pos_y": 16, "label_side": "right" } },
+        "u4": { "type": "item", "settings": { "label": "Bottle", "text": "Vacuum-insulated stainless steel. Mission approved.", "pos_x": 85, "pos_y": 22, "label_side": "left" } },
+        "u5": { "type": "item", "settings": { "label": "Patch", "text": "Embroidered Starship mission patch. Collect every milestone.", "pos_x": 60, "pos_y": 48, "label_side": "right" } }
+      },
+      "block_order": ["u1", "u2", "u3", "u4", "u5"]
+    },
     "collections": {
       "type": "collection-grid",
       "settings": {
@@ -53,6 +70,7 @@
   "order": [
     "hero",
     "trending",
+    "uniform",
     "collections",
     "collectibles"
   ]
