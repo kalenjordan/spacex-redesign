@@ -1,5 +1,5 @@
 {% comment %}
-  Renders a product card.
+  Renders a product card with the title + price overlaid on the image.
   Accepts:
   - product: {Product} product object (optional — placeholder shown when blank)
   - placeholder_index: {Number} index used to vary placeholder art
@@ -18,9 +18,9 @@
 -%}
 
 <a class="product-card" {% if product != blank %}href="{{ product.url }}"{% else %}href="#"{% endif %}>
-  <div class="product-card__media">
-    {% if is_new %}<span class="badge product-card__badge">New</span>{% endif %}
+  {% if is_new %}<span class="badge product-card__badge">New</span>{% endif %}
 
+  <div class="product-card__media">
     {% if product != blank and product.featured_media %}
       <img
         class="product-card__img"
@@ -37,13 +37,12 @@
     {% endif %}
   </div>
 
-  <div class="product-card__body">
+  <div class="product-card__scrim"></div>
+
+  <div class="product-card__overlay">
     <h3 class="product-card__title">
       {% if product != blank %}{{ product.title }}{% else %}SpaceX Gear{% endif %}
     </h3>
-    <p class="product-card__meta">
-      {% if product != blank and product.type != blank %}{{ product.type }}{% else %}Premium Collection{% endif %}
-    </p>
     <p class="product-card__price">
       {% if product != blank %}{{ product.price | money }}{% else %}$34.00{% endif %}
     </p>
